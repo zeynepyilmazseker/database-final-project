@@ -5,7 +5,7 @@ sql_database:
   type: "mysql"  # "mysql" or "mssql"
   host: "localhost"
   port: 3306  # MySQL: 3306, MSSQL: 1433
-  database: "ecommerce_test"  # Test veritabanı
+  database: "test_db"  # Test veritabanı
   username: "root"  # MySQL kullanıcı adınızı girin
   password: ""  # MySQL şifrenizi girin
   # For MSSQL, you may need additional connection parameters:

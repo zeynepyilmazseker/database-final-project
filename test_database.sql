@@ -4,10 +4,10 @@
 -- İçerik: Tablolar, Foreign Key'ler, Trigger'ler, SP'ler, Function'lar
 -- ============================================================
 
--- Veritabanını oluştur
-DROP DATABASE IF EXISTS ecommerce_test;
-CREATE DATABASE ecommerce_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE ecommerce_test;
+-- Veritabanını oluştur (eğer yoksa)
+-- NOT: test_db veritabanı zaten oluşturulmuşsa bu satırları atlayabilirsiniz
+-- CREATE DATABASE IF NOT EXISTS test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE test_db;
 
 -- ============================================================
 -- TABLOLAR
