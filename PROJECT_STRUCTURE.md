@@ -1,6 +1,5 @@
 # Proje Yapısı
 
-Bu dokümantasyon, projenin yapısını ve her dosyanın işlevini açıklar.
 
 ## Dizin Yapısı
 
