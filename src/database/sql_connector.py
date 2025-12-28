@@ -8,7 +8,12 @@ from typing import Optional, Dict, Any
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.engine import Engine
 import pymysql
-import pyodbc
+
+# pyodbc sadece MSSQL için gerekli, conditional import
+try:
+    import pyodbc
+except ImportError:
+    pyodbc = None
 
 logger = logging.getLogger(__name__)
 

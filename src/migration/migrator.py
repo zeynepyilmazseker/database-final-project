@@ -6,7 +6,7 @@ SQL veritabanından MongoDB'ye veri aktarımını yönetir.
 
 import logging
 from typing import Dict, List, Any, Optional
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy import text
 from pymongo import UpdateOne
 
@@ -127,7 +127,7 @@ class DataMigrator:
         with engine.connect() as conn:
             result = conn.execute(text(f"SELECT * FROM {quoted_table}"))
             rows = result.fetchall()
-            column_names = result.keys()
+            column_names = list(result.keys())
         
         if not rows:
             logger.warning(f"{table_name} tablosu boş, atlanıyor")
@@ -138,20 +138,27 @@ class DataMigrator:
         for row in rows:
             doc = {}
             
+            # Row'u dict'e çevir (SQLAlchemy 2.0 uyumluluğu için)
+            row_dict = dict(row._mapping) if hasattr(row, '_mapping') else dict(zip(column_names, row))
+            
             # Primary key'i _id olarak kullan (eğer preserve_ids True ise)
             if self.preserve_ids and primary_keys:
                 if len(primary_keys) == 1:
                     # Tek kolonlu PK
-                    doc['_id'] = self._convert_value(row[primary_keys[0]])
+                    doc['_id'] = self._convert_value(row_dict[primary_keys[0]])
                 else:
                     # Composite PK - string olarak birleştir
-                    pk_value = '_'.join([str(row[pk]) for pk in primary_keys])
+                    pk_value = '_'.join([str(row_dict[pk]) for pk in primary_keys])
                     doc['_id'] = pk_value
             
             # Tüm kolonları ekle
             for col_name in column_names:
-                if col_name not in primary_keys or not self.preserve_ids:
-                    value = row[col_name]
+                # Primary key'i _id olarak kullandıysak, belge içinde de tut (None yerine gerçek değer)
+                if col_name in primary_keys and self.preserve_ids:
+                    # Primary key değerini belge içinde de sakla
+                    doc[col_name] = self._convert_value(row_dict[col_name])
+                elif col_name not in primary_keys:
+                    value = row_dict[col_name]
                     doc[col_name] = self._convert_value(value)
             
             documents.append(doc)
@@ -176,7 +183,7 @@ class DataMigrator:
             documents: Upsert edilecek belgeler
         """
         collection = self.mongodb_connector.get_collection(collection_name)
-        if not collection:
+        if collection is None:
             return
         
         operations = []
@@ -221,6 +228,10 @@ class DataMigrator:
         
         # DateTime objelerini string'e çevir
         if isinstance(value, datetime):
+            return value.isoformat()
+        
+        # Date objelerini string'e çevir
+        if isinstance(value, date):
             return value.isoformat()
         
         # Binary/BLOB verilerini base64 string'e çevir

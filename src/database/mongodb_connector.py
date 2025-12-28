@@ -98,7 +98,7 @@ class MongoDBConnector:
         Returns:
             Collection: MongoDB collection
         """
-        if self.database:
+        if self.database is not None:
             return self.database[collection_name]
         return None
     
@@ -113,7 +113,7 @@ class MongoDBConnector:
             bool: Silme işlemi başarılı ise True
         """
         try:
-            if self.database:
+            if self.database is not None:
                 self.database.drop_collection(collection_name)
                 logger.info(f"Collection '{collection_name}' silindi")
                 return True
@@ -132,7 +132,7 @@ class MongoDBConnector:
         Returns:
             bool: Collection varsa True
         """
-        if self.database:
+        if self.database is not None:
             return collection_name in self.database.list_collection_names()
         return False
     
@@ -150,10 +150,18 @@ class MongoDBConnector:
         """
         try:
             collection = self.get_collection(collection_name)
-            if collection:
+            if collection is not None:
                 index_spec = [(field, 1) for field in index_fields]
-                collection.create_index(index_spec, unique=unique)
-                logger.debug(f"Index oluşturuldu: {collection_name}.{index_fields}")
+                # Index zaten varsa hata verme (idempotent çalışma için)
+                try:
+                    collection.create_index(index_spec, unique=unique)
+                    logger.debug(f"Index oluşturuldu: {collection_name}.{index_fields}")
+                except Exception as idx_error:
+                    # Index zaten varsa sadece logla, hata olarak sayma
+                    if "existing index" in str(idx_error).lower() or "duplicate" in str(idx_error).lower():
+                        logger.debug(f"Index zaten mevcut: {collection_name}.{index_fields}")
+                    else:
+                        raise
                 return True
             return False
         except Exception as e:
@@ -175,7 +183,7 @@ class MongoDBConnector:
         """
         try:
             collection = self.get_collection(collection_name)
-            if not collection:
+            if collection is None:
                 return 0
             
             inserted_count = 0

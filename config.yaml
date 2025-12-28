@@ -7,7 +7,7 @@ sql_database:
   port: 3306  # MySQL: 3306, MSSQL: 1433
   database: "test_db"  # Test veritabanı
   username: "root"  # MySQL kullanıcı adınızı girin
-  password: ""  # MySQL şifrenizi girin
+  password: "5545228936Zm."  # MySQL şifrenizi girin
   # For MSSQL, you may need additional connection parameters:
   # driver: "ODBC Driver 17 for SQL Server"
   # trust_server_certificate: true
