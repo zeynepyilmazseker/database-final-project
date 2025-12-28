@@ -1,0 +1,41 @@
+# Database Migration Tool Configuration
+
+# SQL Database Configuration (MySQL or MSSQL)
+sql_database:
+  type: "mysql"  # "mysql" or "mssql"
+  host: "localhost"
+  port: 3306  # MySQL: 3306, MSSQL: 1433
+  database: "your_database_name"
+  username: "your_username"
+  password: "your_password"
+  # For MSSQL, you may need additional connection parameters:
+  # driver: "ODBC Driver 17 for SQL Server"
+  # trust_server_certificate: true
+
+# MongoDB Configuration
+mongodb:
+  host: "localhost"
+  port: 27017
+  database: "migrated_database"
+  username: ""  # Optional
+  password: ""  # Optional
+  # For MongoDB Atlas or remote connections:
+  # connection_string: "mongodb://username:password@host:port/database"
+
+# Migration Settings
+migration:
+  batch_size: 1000  # Number of documents to insert per batch
+  drop_existing: false  # Drop existing collections before migration
+  preserve_ids: true  # Preserve original primary keys as _id in MongoDB
+  
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/migration.log"
+  console: true
+
+# Reporting Configuration
+reporting:
+  output_dir: "reports"
+  format: "markdown"  # "markdown" or "html"
+
