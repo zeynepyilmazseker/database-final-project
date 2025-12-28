@@ -5,9 +5,9 @@ sql_database:
   type: "mysql"  # "mysql" or "mssql"
   host: "localhost"
   port: 3306  # MySQL: 3306, MSSQL: 1433
-  database: "your_database_name"
-  username: "your_username"
-  password: "your_password"
+  database: "ecommerce_test"  # Test veritabanı
+  username: "root"  # MySQL kullanıcı adınızı girin
+  password: ""  # MySQL şifrenizi girin
   # For MSSQL, you may need additional connection parameters:
   # driver: "ODBC Driver 17 for SQL Server"
   # trust_server_certificate: true
