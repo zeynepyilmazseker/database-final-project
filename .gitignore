@@ -29,7 +29,13 @@ logs/
 
 # Reports
 reports/
-*.md
+# Don't ignore documentation files
+!README.md
+!QUICK_START.md
+!PROJECT_STRUCTURE.md
+!IMPLEMENTATION_NOTES.md
+!TECHNICAL_REPORT_TEMPLATE.md
+!GITHUB_SETUP.md
 *.html
 
 # IDE
