@@ -24,11 +24,11 @@ wheels/
 *.egg
 
 # Logs
-logs/
+# logs/ dizinini ignore etme, sadece .log dosyalarını ignore et
 *.log
 
 # Reports
-reports/
+# reports/ dizinini ignore etme (migration report'ları önemli dokümantasyon)
 # Don't ignore documentation files
 !README.md
 !QUICK_START.md
